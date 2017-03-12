@@ -7,7 +7,7 @@
  * @copyright Copyright &copy; 2014 spacedealer GmbH
  */
 
-namespace spacedealer\geonames\api;
+namespace richweber\geonames\api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Command\CommandInterface;
@@ -78,7 +78,7 @@ class Geonames extends GuzzleClient
         $description = new Description($descriptionConfig);
 
         // init client and set default values
-        parent::__construct($client, $description, [
+        parent::__construct($client, $description, null, null, null, [
             'defaults' => [
                 'username' => $username,
                 'lang' => $lang,
@@ -92,7 +92,7 @@ class Geonames extends GuzzleClient
      */
     public function execute(CommandInterface $command)
     {
-        $result = parent::execute($command);
+        $result = (array) parent::execute($command);
         return new Response($result ?: []);
     }
 } 

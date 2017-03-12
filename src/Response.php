@@ -7,7 +7,7 @@
  * @copyright Copyright &copy; 2014 spacedealer GmbH
  */
 
-namespace spacedealer\geonames\api;
+namespace richweber\geonames\api;
 
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
 
@@ -33,7 +33,7 @@ class Response extends CompletedFutureArray
 
             // error or status response
             $key = key($data);
-            $this->ok = ($key != 'status');
+            $this->ok = ($key !== 'status');
 
             $data = reset($data);
         }

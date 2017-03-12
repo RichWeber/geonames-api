@@ -7,9 +7,9 @@
  * @copyright Copyright &copy; 2014 spacedealer GmbH
  */
 
-namespace spacedealer\tests\geonames\api;
+namespace richweber\tests\geonames\api;
 
-use spacedealer\geonames\api\Response;
+use richweber\geonames\api\Response;
 
 /**
  * Class ResponseTest

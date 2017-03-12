@@ -7,10 +7,9 @@
  * @copyright Copyright &copy; 2014 spacedealer GmbH
  */
 
-namespace spacedealer\tests\geonames\api;
+namespace richweber\tests\geonames\api;
 
-use GuzzleHttp\Subscriber\Mock;
-use spacedealer\geonames\api\Geonames;
+use richweber\geonames\api\Geonames;
 
 /**
  * Class GeonamesTest
@@ -24,34 +23,24 @@ class GeonamesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataProvider
-     * \spacedealer\geonames\api\Response $response
+     * \richweber\geonames\api\Response $response
+     *
+     * @param $command
+     * @param $params
      */
-    public function testCommands($command, $params, $responseFile = null)
+    public function testCommands($command, $params)
     {
         // init api client class
         $client = new Geonames($this->username);
 
-        // load mock response data
-        if (!$responseFile) {
-            $responseFile = 'geonames-' . $command . '.txt';
-        }
-        $mockResponse = file_get_contents(__DIR__ . '/responses/' . $responseFile);
-
-        // create mock response
-        $mock = new Mock([
-            $mockResponse,
-        ]);
-
-        // add the mock subscriber to the client
-        $client->getHttpClient()->getEmitter()->attach($mock);
-
-        // add history
-        // $client->getHttpClient()->getEmitter()->attach($history = new History());
-
-        // execute request
+        /** @var \richweber\geonames\api\Response $response */
         $response = $client->$command($params);
 
         $this->assertTrue($response->isOk());
+        $this->assertEquals(
+            'Kreisfreie Stadt Berlin',
+            $response->getIterator()->getArrayCopy()['postalCodes'][0]['adminName3']
+        );
     }
 
     /**
@@ -74,14 +63,14 @@ class GeonamesTest extends \PHPUnit_Framework_TestCase
     {
         // init api client class
         $client = new Geonames($this->username, 'en', null);
-        $this->assertEquals('http://api.geonames.org/', (string)$client->getDescription()->getBaseUrl());
+        $this->assertEquals('http://api.geonames.org/', (string)$client->getDescription()->getBaseUri());
 
         // init api client class
         $client = new Geonames($this->username, 'en', '');
-        $this->assertEquals('', (string)$client->getDescription()->getBaseUrl());
+        $this->assertEquals('', (string)$client->getDescription()->getBaseUri());
 
         // init api client class
         $client = new Geonames($this->username, 'en', 'https://example.com');
-        $this->assertEquals('https://example.com', (string)$client->getDescription()->getBaseUrl());
+        $this->assertEquals('https://example.com', (string)$client->getDescription()->getBaseUri());
     }
 }
